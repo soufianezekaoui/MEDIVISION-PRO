@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MediVision Pro | Medical Data Analytics Platform</title>
+        
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+        
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        
+        <!-- CSS -->
+        <link rel="stylesheet" href="../static/css/style.css">
+    </head>
+
+    <body>
+    
+        <!-- Medical Background with Gradient -->
+        <div class="medical-background"></div>
+        
+        <!-- Navigation Header -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <div class="logo-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>MediVision <span class="pro">Pro</span></h1>
+                        <p class="tagline">Medical Data Analytics</p>
+                    </div>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="btn-icon" id="uploadBtn" title="Upload CSV Data">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                    <button class="btn-icon" id="predictBtn" title="Risk Predictor">
+                        <i class="fas fa-stethoscope"></i>
+                    </button>
+                    <button class="btn-icon" id="exportPDFBtn" title="Export PDF Report"
+                            style="background:#ef5350;color:white;border-color:#ef5350;">
+                        <i class="fas fa-file-pdf"></i>
+                    </button>
+                    <button class="btn-icon active">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Main Container -->
+        <main class="container">
+            
+            <!-- Hero Statistics -->
+            <section class="hero-stats">
+                <div class="stat-card medical-card">
+                    <div class="stat-icon patients">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalPatients">0</div>
+                        <div class="stat-label">Total Patients</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 2.4%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card medical-card">
+                    <div class="stat-icon cardio">
+                        <i class="fas fa-heart-pulse"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="cardioRate">0%</div>
+                        <div class="stat-label">Cardio Disease Rate</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-down"></i> 1.2%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card medical-card">
+                    <div class="stat-icon bmi">
+                        <i class="fas fa-weight-scale"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="avgBMI">0</div>
+                        <div class="stat-label">Average BMI</div>
+                        <div class="stat-change neutral">
+                            <i class="fas fa-minus"></i> 0.0%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card medical-card">
+                    <div class="stat-icon risk">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="highRisk">0</div>
+                        <div class="stat-label">High-Risk Patients</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-up"></i> 3.1%
+                        </div>
+                    </div>
+                </div>
+            </section>
+    
+            <!-- Alert Banner -->
+            <section class="alert-banner">
+                <div class="alert-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="alert-content">
+                    <h3>Clinical Alert</h3>
+                    <p><strong>12,450 patients</strong> identified with high cardiovascular risk. Recommended interventions: Blood pressure monitoring, lifestyle counseling, and cholesterol screening.</p>
+                </div>
+                <button class="btn-alert-action">View Details</button>
+            </section>
+    
+            <!-- Main Dashboard Grid -->
+            <section class="dashboard-grid">
+                
+                <!-- Risk Assessment Matrix -->
+                <div class="dashboard-card large">
+                    <div class="card-header">
+                        <div>
+                            <h3><i class="fas fa-chart-line"></i> Risk Assessment Matrix</h3>
+                            <p class="card-subtitle">Cardiovascular disease risk by health factors</p>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-card-action" title="Refresh">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="btn-card-action" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="riskMatrix" class="chart-container">
+                            <canvas id="riskChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Lifestyle Factors -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <div>
+                            <h3><i class="fas fa-running"></i> Lifestyle Factors</h3>
+                            <p class="card-subtitle">Impact on cardiovascular health</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="lifestyle-stats">
+                            <div class="lifestyle-item">
+                                <div class="lifestyle-icon smoking">
+                                    <i class="fas fa-smoking"></i>
+                                </div>
+                                <div class="lifestyle-info">
+                                    <div class="lifestyle-label">Smoking</div>
+                                    <div class="lifestyle-value" id="smokingPct">0%</div>
+                                    <div class="lifestyle-bar">
+                                        <div class="lifestyle-bar-fill" id="smokingBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="lifestyle-item">
+                                <div class="lifestyle-icon alcohol">
+                                    <i class="fas fa-wine-glass"></i>
+                                </div>
+                                <div class="lifestyle-info">
+                                    <div class="lifestyle-label">Alcohol Use</div>
+                                    <div class="lifestyle-value" id="alcoholPct">0%</div>
+                                    <div class="lifestyle-bar">
+                                        <div class="lifestyle-bar-fill" id="alcoholBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="lifestyle-item">
+                                <div class="lifestyle-icon activity">
+                                    <i class="fas fa-dumbbell"></i>
+                                </div>
+                                <div class="lifestyle-info">
+                                    <div class="lifestyle-label">Physical Activity</div>
+                                    <div class="lifestyle-value" id="activePct">0%</div>
+                                    <div class="lifestyle-bar">
+                                        <div class="lifestyle-bar-fill success" id="activeBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="lifestyle-item">
+                                <div class="lifestyle-icon weight">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+                                <div class="lifestyle-info">
+                                    <div class="lifestyle-label">Overweight</div>
+                                    <div class="lifestyle-value" id="overweightPct">0%</div>
+                                    <div class="lifestyle-bar">
+                                        <div class="lifestyle-bar-fill" id="overweightBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Categorical Visualization -->
+                <div class="dashboard-card large">
+                    <div class="card-header">
+                        <div>
+                            <h3><i class="fas fa-chart-bar"></i> Health Factors Comparison</h3>
+                            <p class="card-subtitle">Patients with vs without cardiovascular disease</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="categoricalViz" class="visualization-container">
+                            <img id="catPlotImg" alt="Categorical Plot" class="viz-image">
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Blood Pressure Analysis -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <div>
+                            <h3><i class="fas fa-heart-circle-check"></i> Blood Pressure</h3>
+                            <p class="card-subtitle">Distribution by category</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="bp-chart">
+                            <canvas id="bpChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Risk Distribution -->
+                <div class="dashboard-card large">
+                    <div class="card-header">
+                        <div>
+                            <h3><i class="fas fa-chart-area"></i> Risk Score Distribution</h3>
+                            <p class="card-subtitle">Patient risk levels and cardiovascular outcomes</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="riskDistViz" class="visualization-container">
+                            <img id="riskDistImg" alt="Risk Distribution" class="viz-image">
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Correlation Heatmap -->
+                <div class="dashboard-card full-width">
+                    <div class="card-header">
+                        <div>
+                            <h3><i class="fas fa-table-cells"></i> Correlation Heatmap</h3>
+                            <p class="card-subtitle">Relationships between medical variables</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="heatmapViz" class="visualization-container">
+                            <img id="heatmapImg" alt="Correlation Heatmap" class="viz-image">
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- ML Model Insights -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <div>
+                            <h3><i class="fas fa-brain"></i> ML Model Insights</h3>
+                            <p class="card-subtitle">Feature importance for prediction</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="ml-insights">
+                            <div class="ml-accuracy">
+                                <div class="accuracy-circle">
+                                    <svg width="120" height="120">
+                                        <circle cx="60" cy="60" r="50" class="accuracy-bg"></circle>
+                                        <circle cx="60" cy="60" r="50" class="accuracy-fill" id="accuracyCircle"></circle>
+                                    </svg>
+                                    <div class="accuracy-text">
+                                        <div class="accuracy-value" id="mlAccuracy">0%</div>
+                                        <div class="accuracy-label">Accuracy</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="feature-importance" id="featureImportance">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Clinical Recommendations -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <div>
+                            <h3><i class="fas fa-clipboard-check"></i> Clinical Recommendations</h3>
+                            <p class="card-subtitle">Evidence-based interventions</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="recommendations-list">
+                            <div class="recommendation-item high-priority">
+                                <div class="rec-icon">
+                                    <i class="fas fa-syringe"></i>
+                                </div>
+                                <div class="rec-content">
+                                    <h4>Blood Pressure Screening</h4>
+                                    <p>18,200 patients with elevated readings</p>
+                                </div>
+                                <span class="priority-badge high">High</span>
+                            </div>
+    
+                            <div class="recommendation-item medium-priority">
+                                <div class="rec-icon">
+                                    <i class="fas fa-apple-alt"></i>
+                                </div>
+                                <div class="rec-content">
+                                    <h4>Lifestyle Intervention</h4>
+                                    <p>22,100 overweight patients</p>
+                                </div>
+                                <span class="priority-badge medium">Medium</span>
+                            </div>
+    
+                            <div class="recommendation-item medium-priority">
+                                <div class="rec-icon">
+                                    <i class="fas fa-pills"></i>
+                                </div>
+                                <div class="rec-content">
+                                    <h4>Cholesterol Management</h4>
+                                    <p>15,800 with abnormal levels</p>
+                                </div>
+                                <span class="priority-badge medium">Medium</span>
+                            </div>
+    
+                            <div class="recommendation-item low-priority">
+                                <div class="rec-icon">
+                                    <i class="fas fa-ban-smoking"></i>
+                                </div>
+                                <div class="rec-content">
+                                    <h4>Smoking Cessation</h4>
+                                    <p>3,700 active smokers</p>
+                                </div>
+                                <span class="priority-badge low">Low</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+            </section>
+    
+        </main>
+    
+        <!-- Risk Predictor Modal -->
+        <div class="modal" id="predictorModal">
+            <div class="modal-content medical-card">
+                <div class="modal-header">
+                    <h2><i class="fas fa-stethoscope"></i> Cardiovascular Risk Predictor</h2>
+                    <button class="modal-close" id="closePredictorModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="predictorForm" class="predictor-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Age (years)</label>
+                                <input type="number" id="pred_age" min="18" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select id="pred_gender" required>
+                                    <option value="1">Female</option>
+                                    <option value="2">Male</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Height (cm)</label>
+                                <input type="number" id="pred_height" min="120" max="250" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Weight (kg)</label>
+                                <input type="number" id="pred_weight" min="30" max="200" required>
+                            </div>
+                        </div>
+    
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Systolic BP</label>
+                                <input type="number" id="pred_ap_hi" min="80" max="250" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Diastolic BP</label>
+                                <input type="number" id="pred_ap_lo" min="50" max="150" required>
+                            </div>
+                        </div>
+    
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Cholesterol</label>
+                                <select id="pred_cholesterol" required>
+                                    <option value="1">Normal</option>
+                                    <option value="2">Above Normal</option>
+                                    <option value="3">Well Above Normal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Glucose</label>
+                                <select id="pred_gluc" required>
+                                    <option value="1">Normal</option>
+                                    <option value="2">Above Normal</option>
+                                    <option value="3">Well Above Normal</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <div class="form-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="pred_smoke">
+                                <span>Smoker</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="pred_alco">
+                                <span>Alcohol Use</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="pred_active">
+                                <span>Physically Active</span>
+                            </label>
+                        </div>
+    
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-calculator"></i> Calculate Risk
+                        </button>
+                    </form>
+    
+                    <div id="predictionResult" class="prediction-result hidden">
+                        <div class="result-header">
+                            <i class="fas fa-heartbeat"></i>
+                            <h3>Risk Assessment Result</h3>
+                        </div>
+                        <div class="result-body">
+                            <div class="risk-gauge">
+                                <div class="gauge-value" id="riskProbability">0%</div>
+                                <div class="gauge-label">Cardiovascular Risk</div>
+                            </div>
+                            <div class="result-details">
+                                <p><strong>Risk Level:</strong> <span id="riskLevel">-</span></p>
+                                <p><strong>Confidence:</strong> <span id="confidence">-</span></p>
+                                <p class="result-advice" id="riskAdvice"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Upload Modal -->
+        <div class="modal" id="uploadModal">
+            <div class="modal-content medical-card">
+                <div class="modal-header">
+                    <h2><i class="fas fa-upload"></i> Upload Medical Dataset</h2>
+                    <button class="modal-close" id="closeUploadModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size:3rem;color:var(--primary-blue);margin-bottom:1rem;display:block;"></i>
+                        <p style="font-weight:600;">Drag & drop your CSV file here</p>
+                        <p style="color:var(--steel-gray);font-size:.875rem;">or click to browse</p>
+                        <input type="file" id="fileInput" accept=".csv" hidden>
+                    </div>
+                    <div style="margin-top:1rem;padding:1rem;background:#fff3e0;border-radius:8px;border-left:4px solid #ff9800;">
+                        <p style="font-weight:600;color:#e65100;margin-bottom:.5rem;">Required columns:</p>
+                        <p style="color:#bf360c;font-size:.875rem;">age, sex (or gender), height, weight, ap_hi, ap_lo, cholesterol, gluc, smoke, alco, active, cardio</p>
+                    </div>
+                    <div id="uploadStatus" style="margin-top:1rem;"></div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="medical-loader">
+                <div class="heartbeat-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <p>Analyzing medical data...</p>
+            </div>
+        </div>
+    
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>MediVision Pro | Medical Data Analytics Platform</p>
+                <p>Built for freeCodeCamp Data Analysis with Python Certification</p>
+            </div>
+        </footer>
+    
+        <!-- JavaScript -->
+        <script src="../static/js/main.js"></script>
+    </body>
+
+</html>
