@@ -29,7 +29,7 @@ Perfect for: **Data Science and Inforamtion Systems students, Healthcare profess
 ### 📊 Main Dashboard
 *Beautiful medical blue interface with real-time analytics*
 
-![Dashboard Overview](screenshots/dashboard_med.png)
+![Dashboard Overview](data/screenshots/dashboard_med.png)
 
 ### 📈 Data Visualizations
 
@@ -46,7 +46,7 @@ Perfect for: **Data Science and Inforamtion Systems students, Healthcare profess
 ### 🤖 AI Risk Predictor
 *Enter patient data, get instant risk assessment*
 
-![Risk Predictor](screenshots/risk-predictor.png)
+![Risk Predictor](data/screenshots/risk-predictor.png)
 
 ## 📊 What You'll See
 
