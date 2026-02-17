@@ -46,7 +46,7 @@ Perfect for: **Data Science and Inforamtion Systems students, Healthcare profess
 ### 🤖 AI Risk Predictor
 *Enter patient data, get instant risk assessment*
 
-![Risk Predictor](data/screenshots/risk-predictor.png)
+![Risk Predictor](data/screenshots/risk_predictor.png)
 
 ## 📊 What You'll See
 
