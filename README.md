@@ -29,7 +29,7 @@ Perfect for: **Data Science and Inforamtion Systems students, Healthcare profess
 ### 📊 Main Dashboard
 *Beautiful medical blue interface with real-time analytics*
 
-![Dashboard Overview](screenshots/dashboard.png)
+![Dashboard Overview](screenshots/dashboard_med.png)
 
 ### 📈 Data Visualizations
 
@@ -47,32 +47,6 @@ Perfect for: **Data Science and Inforamtion Systems students, Healthcare profess
 *Enter patient data, get instant risk assessment*
 
 ![Risk Predictor](screenshots/risk-predictor.png)
-
----
-
-## 🚀 Quick Start
-
-### Step 1: Install Requirements
-
-```bash
-pip install -r requirements.txt
-```
-
-### Step 2: Choose Your Mode
-
-**For Learning (freeCodeCamp):**
-```bash
-python main.py
-```
-Generates `catplot.png` and `heatmap.png`
-
-**For Dashboard:**
-```bash
-python app.py
-```
-Opens interactive dashboard at `http://localhost:5000`
-
----
 
 ## 📊 What You'll See
 
@@ -211,11 +185,11 @@ This project is perfect for:
 
 ## 📊 Dataset Information
 
-**Source:** UCI Machine Learning Repository (1994 Census)
+**Source   :** UCI Machine Learning Repository (1994 Census)
 
-**Records :** 70,000 patients  
-**Features:** 12 medical variables  
-**Target  :** Cardiovascular disease (binary)
+**Records  :** 70,000 patients  
+**Features :** 12 medical variables  
+**Target   :** Cardiovascular disease (binary)
 
 **Variables:**
 - Objective: age, height, weight, sex
@@ -242,21 +216,6 @@ This project is perfect for:
 
 ---
 
-## 🚀 Deployment
-
-### Local Development:
-```bash
-python app.py
-```
-
-### Production (Render/Railway):
-```bash
-# requirements.txt included
-# Just connect your GitHub repo
-```
-
----
-
 ## 🤝 Contributing
 
 Found a bug? Want to add features?
@@ -278,8 +237,8 @@ MIT License - Free to use for learning and portfolio projects
 
 **Your Name**
 - GitHub: [@soufianezekaoui](https://github.com/soufianezekaoui)
-- LinkedIn: [Soufiane Zekaoui]()
-- Portfolio: [My_Personal_Website.com]()
+- LinkedIn: [Soufiane Zekaoui](https://linkedin.com/in/soufiane-zekaoui-445b1b352/)
+- Portfolio: [My_Personal_Website.com](https://soufianezekaoui.github.io/my_soufianeze_portfolio/)
 
 Built for freeCodeCamp Data Analysis with Python Certification
 
@@ -290,15 +249,6 @@ Built for freeCodeCamp Data Analysis with Python Certification
 - **freeCodeCamp**             - For the amazing curriculum
 - **UCI ML Repository**        - For the medical dataset
 - **Healthcare professionals** - For domain knowledge
-
----
-
-## 📞 Support
-
-Need help?
-- 📖 Check `MEDIVISION_SETUP_GUIDE.md` for detailed instructions
-- 💬 Open an issue on GitHub
-- 📧 Contact via email
 
 ---
 
