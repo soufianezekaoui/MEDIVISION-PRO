@@ -1,13 +1,5 @@
-/* ============================================================
-   MEDIVISION PRO — main.js
-   All 4 fixes applied:
-   1. Risk predictor sends correct fields
-   2. All visualizations load + displayed properly
-   3. Upload data works
-   4. PDF export works
-   ============================================================ */
-
-// ── Helpers ───────────────────────────────────────────────────────────────
+// Helpers
+// ===========================================================================
 
 function toggleLoading(show) {
     const el = document.getElementById('loadingOverlay');
@@ -41,8 +33,8 @@ function animateNumber(id, target, suffix = '') {
     }, ms);
 }
 
-// ── Boot ───────────────────────────────────────────────────────────────────
-
+// Boot
+// ===========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     loadStats();
     loadVisualizations();   // ✅ FIX 2 — loads all 3 images
@@ -51,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🏥 MediVision Pro ready');
 });
 
-// ── Statistics ─────────────────────────────────────────────────────────────
+// Statistics
+// ===========================================================================
 
 async function loadStats() {
     toggleLoading(true);
@@ -86,7 +79,8 @@ function setBar(labelId, barId, value) {
     if (bar) setTimeout(() => { bar.style.width = Math.min(value, 100) + '%'; }, 300);
 }
 
-// ── ✅ FIX 2 — Load ALL 3 visualizations ──────────────────────────────────
+// Load ALL 3 visualizations
+// ===========================================================================
 
 async function loadVisualizations() {
     await Promise.allSettled([
@@ -118,7 +112,8 @@ async function loadImage(endpoint, imgId) {
     }
 }
 
-// ── Chart.js charts ────────────────────────────────────────────────────────
+// Charts
+// ===========================================================================
 
 const charts = {};
 
@@ -211,7 +206,8 @@ async function loadMLInfo() {
     } catch (e) { console.error('ML info error:', e); }
 }
 
-// ── ✅ FIX 1 — RISK PREDICTOR ──────────────────────────────────────────────
+// RISK PREDICTOR 
+// ===========================================================================
 
 document.getElementById('predictorForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -279,7 +275,8 @@ function showPredictionResult(r) {
     }
 }
 
-// ── ✅ FIX 3 — UPLOAD DATA ─────────────────────────────────────────────────
+// UPLOAD DATA
+// ===========================================================================
 
 function wireUpload() {
     const area  = document.getElementById('uploadArea');
@@ -337,7 +334,8 @@ async function doUpload(file) {
     }
 }
 
-// ── ✅ FIX 4 — PDF EXPORT ──────────────────────────────────────────────────
+// PDF EXPORT
+// ===========================================================================
 
 async function exportPDF() {
     const btn = document.getElementById('exportPDFBtn');
@@ -370,7 +368,8 @@ async function exportPDF() {
     }
 }
 
-// ── Wire all UI buttons ────────────────────────────────────────────────────
+// Wire all UI buttons
+// ===========================================================================
 
 function wireUI() {
     // Upload modal
