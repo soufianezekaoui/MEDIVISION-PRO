@@ -45,9 +45,9 @@
                     <button class="btn-icon" id="predictBtn" title="Risk Predictor">
                         <i class="fas fa-stethoscope"></i>
                     </button>
-                    <button class="btn-icon" id="exportPDFBtn" title="Export PDF Report"
-                            style="background:#ef5350;color:white;border-color:#ef5350;">
+                    <button class="btn-pdf" id="exportPDFBtn">
                         <i class="fas fa-file-pdf"></i>
+                        <span class="btn-pdf-label">Export PDF</span>
                     </button>
                     <button class="btn-icon active">
                         <i class="fas fa-bell"></i>
@@ -129,32 +129,28 @@
     
             <!-- Main Dashboard Grid -->
             <section class="dashboard-grid">
-                
-                <!-- Risk Assessment Matrix -->
-                <div class="dashboard-card large">
+    
+                <!-- Risk Assessment Matrix — full width ── -->
+                <div class="dashboard-card card-full">
                     <div class="card-header">
                         <div>
                             <h3><i class="fas fa-chart-line"></i> Risk Assessment Matrix</h3>
                             <p class="card-subtitle">Cardiovascular disease risk by health factors</p>
                         </div>
                         <div class="card-actions">
-                            <button class="btn-card-action" title="Refresh">
-                                <i class="fas fa-sync-alt"></i>
-                            </button>
-                            <button class="btn-card-action" title="Download">
-                                <i class="fas fa-download"></i>
-                            </button>
+                            <button class="btn-card-action" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-card-action" title="Download"><i class="fas fa-download"></i></button>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div id="riskMatrix" class="chart-container">
+                        <div id="riskMatrix" class="chart-container" style="height:320px;">
                             <canvas id="riskChart"></canvas>
                         </div>
                     </div>
                 </div>
     
-                <!-- Lifestyle Factors -->
-                <div class="dashboard-card">
+                <!-- Lifestyle Factors (left) + Health Factors Comparison (right) -->
+                <div class="dashboard-card card-half">
                     <div class="card-header">
                         <div>
                             <h3><i class="fas fa-running"></i> Lifestyle Factors</h3>
@@ -164,62 +160,42 @@
                     <div class="card-body">
                         <div class="lifestyle-stats">
                             <div class="lifestyle-item">
-                                <div class="lifestyle-icon smoking">
-                                    <i class="fas fa-smoking"></i>
-                                </div>
+                                <div class="lifestyle-icon smoking"><i class="fas fa-smoking"></i></div>
                                 <div class="lifestyle-info">
                                     <div class="lifestyle-label">Smoking</div>
                                     <div class="lifestyle-value" id="smokingPct">0%</div>
-                                    <div class="lifestyle-bar">
-                                        <div class="lifestyle-bar-fill" id="smokingBar"></div>
-                                    </div>
+                                    <div class="lifestyle-bar"><div class="lifestyle-bar-fill" id="smokingBar"></div></div>
                                 </div>
                             </div>
-    
                             <div class="lifestyle-item">
-                                <div class="lifestyle-icon alcohol">
-                                    <i class="fas fa-wine-glass"></i>
-                                </div>
+                                <div class="lifestyle-icon alcohol"><i class="fas fa-wine-glass"></i></div>
                                 <div class="lifestyle-info">
                                     <div class="lifestyle-label">Alcohol Use</div>
                                     <div class="lifestyle-value" id="alcoholPct">0%</div>
-                                    <div class="lifestyle-bar">
-                                        <div class="lifestyle-bar-fill" id="alcoholBar"></div>
-                                    </div>
+                                    <div class="lifestyle-bar"><div class="lifestyle-bar-fill" id="alcoholBar"></div></div>
                                 </div>
                             </div>
-    
                             <div class="lifestyle-item">
-                                <div class="lifestyle-icon activity">
-                                    <i class="fas fa-dumbbell"></i>
-                                </div>
+                                <div class="lifestyle-icon activity"><i class="fas fa-dumbbell"></i></div>
                                 <div class="lifestyle-info">
                                     <div class="lifestyle-label">Physical Activity</div>
                                     <div class="lifestyle-value" id="activePct">0%</div>
-                                    <div class="lifestyle-bar">
-                                        <div class="lifestyle-bar-fill success" id="activeBar"></div>
-                                    </div>
+                                    <div class="lifestyle-bar"><div class="lifestyle-bar-fill success" id="activeBar"></div></div>
                                 </div>
                             </div>
-    
                             <div class="lifestyle-item">
-                                <div class="lifestyle-icon weight">
-                                    <i class="fas fa-chart-pie"></i>
-                                </div>
+                                <div class="lifestyle-icon weight"><i class="fas fa-chart-pie"></i></div>
                                 <div class="lifestyle-info">
                                     <div class="lifestyle-label">Overweight</div>
                                     <div class="lifestyle-value" id="overweightPct">0%</div>
-                                    <div class="lifestyle-bar">
-                                        <div class="lifestyle-bar-fill" id="overweightBar"></div>
-                                    </div>
+                                    <div class="lifestyle-bar"><div class="lifestyle-bar-fill" id="overweightBar"></div></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
     
-                <!-- Categorical Visualization -->
-                <div class="dashboard-card large">
+                <div class="dashboard-card card-half">
                     <div class="card-header">
                         <div>
                             <h3><i class="fas fa-chart-bar"></i> Health Factors Comparison</h3>
@@ -233,8 +209,8 @@
                     </div>
                 </div>
     
-                <!-- Blood Pressure Analysis -->
-                <div class="dashboard-card">
+                <!-- Blood Pressure (left) + Risk Score Distribution (right) -->
+                <div class="dashboard-card card-half">
                     <div class="card-header">
                         <div>
                             <h3><i class="fas fa-heart-circle-check"></i> Blood Pressure</h3>
@@ -242,14 +218,13 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="bp-chart">
+                        <div class="bp-chart" style="height:300px;">
                             <canvas id="bpChart"></canvas>
                         </div>
                     </div>
                 </div>
     
-                <!-- Risk Distribution -->
-                <div class="dashboard-card large">
+                <div class="dashboard-card card-half">
                     <div class="card-header">
                         <div>
                             <h3><i class="fas fa-chart-area"></i> Risk Score Distribution</h3>
@@ -263,8 +238,8 @@
                     </div>
                 </div>
     
-                <!-- Correlation Heatmap -->
-                <div class="dashboard-card full-width">
+                <!-- Correlation Heatmap — full width ── -->
+                <div class="dashboard-card card-full">
                     <div class="card-header">
                         <div>
                             <h3><i class="fas fa-table-cells"></i> Correlation Heatmap</h3>
@@ -517,5 +492,6 @@
         <!-- JavaScript -->
         <script src="../static/js/main.js"></script>
     </body>
-
+    
 </html>
+

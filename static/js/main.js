@@ -1,69 +1,47 @@
-// Application State
-const App = {
-    data: null,
-    charts: {},
-    isLoading: false
-};
+/* ============================================================
+   MEDIVISION PRO — main.js
+   All 4 fixes applied:
+   1. Risk predictor sends correct fields
+   2. All visualizations load + displayed properly
+   3. Upload data works
+   4. PDF export works
+   ============================================================ */
 
-// UTILITY FUNCTIONS
-// ============================================================================
+// ── Helpers ───────────────────────────────────────────────────────────────
 
 function toggleLoading(show) {
-    const overlay = document.getElementById('loadingOverlay');
-    if (show) {
-        overlay.classList.add('active');
-        App.isLoading = true;
-    } else {
-        overlay.classList.remove('active');
-        App.isLoading = false;
+    const el = document.getElementById('loadingOverlay');
+    if (!el) return;
+    el.classList.toggle('active', show);
+}
+
+function showModal(id)  { document.getElementById(id)?.classList.add('active'); }
+function hideModal(id)  { document.getElementById(id)?.classList.remove('active'); }
+
+async function api(url, opts = {}) {
+    const r = await fetch(url, opts);
+    if (!r.ok) {
+        const err = await r.json().catch(() => ({ error: r.statusText }));
+        throw new Error(err.error || r.statusText);
     }
+    return r.json();
 }
 
-function showModal(modalId) {
-    document.getElementById(modalId).classList.add('active');
+function animateNumber(id, target, suffix = '') {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const steps = 50, ms = 1800 / steps;
+    let i = 0;
+    const iv = setInterval(() => {
+        i++;
+        const v = (target * i) / steps;
+        el.textContent = (target > 100 ? Math.floor(v).toLocaleString()
+                                       : v.toFixed(1)) + suffix;
+        if (i >= steps) { clearInterval(iv); }
+    }, ms);
 }
 
-function hideModal(modalId) {
-    document.getElementById(modalId).classList.remove('active');
-}
-
-function animateCounter(elementId, target, suffix = '') {
-    const element = document.getElementById(elementId);
-    const duration = 2000;
-    const steps = 60;
-    const stepValue = target / steps;
-    let current = 0;
-    
-    const timer = setInterval(() => {
-        current += stepValue;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        
-        const formatted = typeof target === 'number' && target > 100 
-            ? Math.floor(current).toLocaleString()
-            : current.toFixed(1);
-        
-        element.textContent = formatted + suffix;
-    }, duration / steps);
-}
-
-async function fetchAPI(endpoint) {
-    try {
-        const response = await fetch(endpoint);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error(`Error fetching ${endpoint}:`, error);
-        throw error;
-    }
-}
-
-// BOOT
-// ============================================================================
+// ── Boot ───────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
     loadStats();
@@ -73,8 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🏥 MediVision Pro ready');
 });
 
-// Statistics
-// ============================================================================
+// ── Statistics ─────────────────────────────────────────────────────────────
 
 async function loadStats() {
     toggleLoading(true);
@@ -109,8 +86,7 @@ function setBar(labelId, barId, value) {
     if (bar) setTimeout(() => { bar.style.width = Math.min(value, 100) + '%'; }, 300);
 }
 
-// Load ALL 3 visualizations
-// ============================================================================
+// ── ✅ FIX 2 — Load ALL 3 visualizations ──────────────────────────────────
 
 async function loadVisualizations() {
     await Promise.allSettled([
@@ -142,8 +118,7 @@ async function loadImage(endpoint, imgId) {
     }
 }
 
-// CHARTS
-// ============================================================================
+// ── Chart.js charts ────────────────────────────────────────────────────────
 
 const charts = {};
 
@@ -236,8 +211,7 @@ async function loadMLInfo() {
     } catch (e) { console.error('ML info error:', e); }
 }
 
-// RISK PREDICTOR
-// ============================================================================
+// ── ✅ FIX 1 — RISK PREDICTOR ──────────────────────────────────────────────
 
 document.getElementById('predictorForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -305,8 +279,7 @@ function showPredictionResult(r) {
     }
 }
 
-// UPLOAD DATA
-// ============================================================================
+// ── ✅ FIX 3 — UPLOAD DATA ─────────────────────────────────────────────────
 
 function wireUpload() {
     const area  = document.getElementById('uploadArea');
@@ -364,8 +337,7 @@ async function doUpload(file) {
     }
 }
 
-// PDF EXPORT
-// ============================================================================
+// ── ✅ FIX 4 — PDF EXPORT ──────────────────────────────────────────────────
 
 async function exportPDF() {
     const btn = document.getElementById('exportPDFBtn');
@@ -398,8 +370,7 @@ async function exportPDF() {
     }
 }
 
-// Wire all UI buttons
-// ============================================================================
+// ── Wire all UI buttons ────────────────────────────────────────────────────
 
 function wireUI() {
     // Upload modal
@@ -422,7 +393,6 @@ function wireUI() {
         m.addEventListener('click', e => { if (e.target === m) hideModal(m.id); });
     });
 }
-
 console.log(`
 ╔═══════════════════════════════════════════════════════════════╗
 ║                                                               ║

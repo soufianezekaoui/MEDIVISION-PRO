@@ -100,19 +100,14 @@ def train_model(df=None):
     global ml_model, feature_importance, model_accuracy
     if df is None:
         df = load_medical_data()
-    if df.empty:
-        return
-
-    df_c  = clean_data(df)
-    valid = [f for f in FEATURES if f in df_c.columns]
-    X, y  = df_c[valid], df_c['cardio']
-
-    Xtr,Xte,ytr,yte = train_test_split(X, y, test_size=0.2, random_state=42)
-    ml_model = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
-    ml_model.fit(Xtr, ytr)
-
-    model_accuracy    = accuracy_score(yte, ml_model.predict(Xte))
-    feature_importance = dict(zip(valid, ml_model.feature_importances_))
+    df = prepare_medical_data(df)
+    X = df[FEATURES]
+    y = df['cardio']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    ml_model = RandomForestClassifier(random_state=42)
+    ml_model.fit(X_train, y_train)
+    model_accuracy = accuracy_score(y_test, ml_model.predict(X_test))
+    feature_importance = ml_model.feature_importances_
     print(f"✓ ML Model trained  accuracy={model_accuracy:.2%}")
 
 
@@ -288,9 +283,9 @@ def api_ml_info():
         if ml_model is None:
             train_model()
         return jsonify({
-            'trained':            ml_model is not None,
-            'accuracy':           round(model_accuracy * 100, 1),
-            'feature_importance': feature_importance,
+            'trained': ml_model is not None,
+            'accuracy': round(model_accuracy * 100, 1),
+            'feature_importance': list(feature_importance),
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -303,50 +298,32 @@ def api_ml_info():
 def api_predict():
     try:
         raw = request.get_json()
-
-        # Age: frontend sends years directly
-        age_years = float(raw.get('age', 40))
-
-        # Sex: accept both 'sex' and 'gender'
-        sex = int(raw.get('sex', raw.get('gender', 1)))
-
-        height = float(raw.get('height', 170))
-        weight = float(raw.get('weight', 70))
-        bmi    = weight / ((height/100) ** 2)
-
         patient = {
-            'age_years':   age_years,
-            'sex':         sex,
-            'height':      height,
-            'weight':      weight,
-            'bmi':         bmi,
-            'ap_hi':       float(raw.get('ap_hi', 120)),
-            'ap_lo':       float(raw.get('ap_lo', 80)),
+            'age_years': float(raw.get('age', 40)),
+            'sex': int(raw.get('sex', 1)),
+            'height': float(raw.get('height', 170)),
+            'weight': float(raw.get('weight', 70)),
+            'bmi': float(raw.get('weight', 70)) / ((float(raw.get('height', 170)) / 100) ** 2),
+            'ap_hi': float(raw.get('ap_hi', 120)),
+            'ap_lo': float(raw.get('ap_lo', 80)),
             'cholesterol': int(raw.get('cholesterol', 1)),
-            'gluc':        int(raw.get('gluc', 1)),
-            'smoke':       int(raw.get('smoke', 0)),
-            'alco':        int(raw.get('alco', 0)),
-            'active':      int(raw.get('active', 1)),
-            'overweight':  1 if bmi > 25 else 0,
+            'gluc': int(raw.get('gluc', 1)),
+            'smoke': int(raw.get('smoke', 0)),
+            'alco': int(raw.get('alco', 0)),
+            'active': int(raw.get('active', 1)),
+            'overweight': 1 if float(raw.get('weight', 70)) / ((float(raw.get('height', 170)) / 100) ** 2) > 25 else 0,
         }
-
         if ml_model is None:
             train_model()
-
-        valid = [f for f in FEATURES if f in patient]
-        X     = pd.DataFrame([patient])[valid]
-        pred  = ml_model.predict(X)[0]
+        X = pd.DataFrame([patient])[FEATURES]
+        pred = ml_model.predict(X)[0]
         proba = ml_model.predict_proba(X)[0]
-
         return jsonify({
-            'has_risk':         bool(pred),
+            'has_risk': bool(pred),
             'risk_probability': round(float(proba[1]) * 100, 1),
-            'confidence':       round(float(max(proba)) * 100, 1),
+            'confidence': round(float(max(proba)) * 100, 1),
         })
-
     except Exception as e:
-        print(f"[predict-risk] ERROR: {e}")
-        import traceback; traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 

@@ -1,13 +1,13 @@
 /* CSS VARIABLES
    ============================================================================ */
-:root {
+   :root {
     /* Medical Blue Palette */
     --primary-blue: #1e88e5;        /* Medical blue - primary */
     --soft-blue: #64b5f6;           /* Light blue accent */
     --tech-teal: #26c6da;           /* Teal for technology */
     --deep-navy: #0d47a1;           /* Dark blue headers */
     
-    /* Medical Grays */
+    /* Medical Grays (from hospital environment) */
     --cloud-gray: #eceff1;          /* Soft cloud background */
     --mist-gray: #cfd8dc;           /* Mist overlay */
     --steel-gray: #90a4ae;          /* Steel accents */
@@ -69,7 +69,7 @@ body {
     min-height: 100vh;
 }
 
-/* MEDICAL BACKGROUND - Inspired by hospital environment images
+/* MEDICAL BACKGROUND
    ============================================================================ */
 .medical-background {
     position: fixed;
@@ -79,6 +79,7 @@ body {
     height: 100%;
     z-index: -2;
     
+    /* Soft blue-gray gradient like in medical images */
     background: linear-gradient(
         135deg,
         var(--bg-gradient-start) 0%,
@@ -86,6 +87,7 @@ body {
         var(--bg-gradient-end) 100%
     );
     
+    /* Add subtle texture overlay */
     background-image: 
         linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%),
         repeating-linear-gradient(
@@ -243,7 +245,6 @@ body {
     justify-content: center;
     font-weight: 600;
 }
-
 
 /* HERO STATISTICS
    ============================================================================ */
@@ -414,13 +415,38 @@ body {
    ============================================================================ */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    /* 2 equal columns on large screens */
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
     margin: var(--spacing-xl) 0;
 }
 
+/* Full width */
+.card-full  { grid-column: 1 / -1; }
+
+/* Half width */
+.card-half  { grid-column: span 1; }
+
+/* Legacy aliases */
+.dashboard-card.large      { grid-column: 1 / -1; }
+.dashboard-card.full-width { grid-column: 1 / -1; }
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .dashboard-grid { gap: var(--spacing-md); }
+}
+
+/* Mobile*/
+@media (max-width: 768px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .card-full,
+    .card-half,
+    .dashboard-card.large,
+    .dashboard-card.full-width { grid-column: 1 / -1; }
+}
+
+/* Card base */
 .dashboard-card {
-    grid-column: span 6;
     background: var(--card-bg);
     backdrop-filter: blur(10px);
     border-radius: var(--radius-lg);
@@ -431,12 +457,43 @@ body {
     animation: fadeInUp 0.6s ease-out backwards;
 }
 
-.dashboard-card.large {
-    grid-column: span 8;
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-large);
 }
 
-.dashboard-card.full-width {
-    grid-column: span 12;
+/* DF EXPORT BUTTON
+   ============================================================================ */
+.btn-pdf {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--alert-red);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0 1.25rem;
+    height: 45px;
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+}
+
+.btn-pdf:hover {
+    background: #c62828;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(239, 83, 80, 0.45);
+}
+
+.btn-pdf i { font-size: 1rem; }
+
+/* On small screens */
+@media (max-width: 600px) {
+    .btn-pdf { padding: 0; width: 45px; justify-content: center; }
+    .btn-pdf-label { display: none; }
 }
 
 .dashboard-card:hover {
@@ -1025,27 +1082,12 @@ body {
     margin: 0.25rem 0;
 }
 
-/* RESPONSIVE
+/* RESPONSIVE 
    ============================================================================ */
-@media (max-width: 1024px) {
-    .dashboard-card,
-    .dashboard-card.large {
-        grid-column: span 12;
-    }
-}
-
 @media (max-width: 768px) {
-    .hero-stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .brand-text h1 {
-        font-size: 1.25rem;
-    }
+    .hero-stats { grid-template-columns: 1fr; }
+    .form-row   { grid-template-columns: 1fr; }
+    .brand-text h1 { font-size: 1.25rem; }
 }
 
 /* UPLOAD AREA
